@@ -21,6 +21,8 @@ services:
       - "-zmqpubrawblock=tcp://172.18.0.2:28332"
       - "-zmqpubrawtx=tcp://172.18.0.2:28333"
   lnd:
+    ports:
+      - "9735:9735"
     image: joshuanapoli/lnd:v0.14.1-beta
     container_name: lnd
     depends_on:
