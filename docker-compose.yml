@@ -1,0 +1,48 @@
+version: "3.3"
+services:
+  bitcoin-core:
+    ports:
+      - "8333:8333"
+    container_name: bitcoin-core
+    image: ruimarinho/bitcoin-core
+    restart: always
+    volumes:
+      - ./bitcoin:/home/bitcoin/.bitcoin
+    networks:
+      rpc:
+        ipv4_address: 172.18.0.2
+    command:
+      - "-prune=${PRUNE:-550}"
+      - "-rpcbind=127.0.0.1"
+      - "-rpcallowip=127.0.0.1"
+      - "-rpcbind=172.18.0.2"
+      - "-rpcallowip=172.18.0.0/16"
+      - "-rpcauth=${RPCAUTH:?use rpcauth.py to create a password and set the RPCPASS in .env}"
+
+  lnd:
+    image: joshuanapoli/lnd:v0.14.1-beta
+    container_name: lnd
+    depends_on:
+      - bitcoin-core
+    restart: always
+    volumes:
+      - ./lnd:/root/.lnd
+    networks:
+      rpc:
+        ipv4_address: 172.18.0.3
+    command:
+      - "--debuglevel=debug"
+      - "--bitcoin.active"
+      - "--bitcoin.mainnet"
+      - "--bitcoin.node=bitcoind"
+      - "--bitcoind.rpcuser=${RPCUSER:-lnd}"
+      - "--bitcoind.rpcpass=${RPCPASS:?use rpcauth.py to create a password and set the RPCPASS in .env}"
+      - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
+      - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
+      - "--externalip=${EXTERNALIP}"
+
+networks:
+  rpc:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16

@@ -1,0 +1,9 @@
+# IDE
+.idea/
+
+# local configuration
+.env
+
+# state
+lnd/
+bitcoin/
