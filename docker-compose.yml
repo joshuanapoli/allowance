@@ -37,6 +37,7 @@ services:
       - "--bitcoin.node=bitcoind"
       - "--bitcoind.rpcuser=${RPCUSER:-lnd}"
       - "--bitcoind.rpcpass=${RPCPASS:?use rpcauth.py to create a password and set the RPCPASS in .env}"
+      - "--bitcoind.rpchost=bitcoin-core"
       - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
       - "--externalip=${EXTERNALIP}"
