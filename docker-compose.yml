@@ -18,8 +18,8 @@ services:
       - "-rpcbind=172.18.0.2"
       - "-rpcallowip=172.18.0.0/16"
       - "-rpcauth=${RPCAUTH:?use rpcauth.py to create a password and set the RPCPASS in .env}"
-      - "-zmqpubrawblock=172.18.0.2"
-      - "-zmqpubrawtx=172.18.0.2"
+      - "-zmqpubrawblock=tcp://172.18.0.2:28332"
+      - "-zmqpubrawtx=tcp://172.18.0.2:28333"
   lnd:
     image: joshuanapoli/lnd:v0.14.1-beta
     container_name: lnd
