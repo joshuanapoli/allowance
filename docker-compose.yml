@@ -34,7 +34,6 @@ services:
       rpc:
         ipv4_address: 172.18.0.3
     command:
-      - "--debuglevel=debug"
       - "--bitcoin.active"
       - "--bitcoin.mainnet"
       - "--bitcoin.node=bitcoind"
