@@ -44,6 +44,7 @@ services:
       - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
       - "--externalip=${EXTERNALIP}"
+      - "--alias=${ALIAS}"
 
 networks:
   rpc:
