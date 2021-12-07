@@ -4,6 +4,7 @@ ALIAS=myname
 RPCUSER=lnd
 RPCAUTH=lnd:123$567890abcdef
 RPCPASS=secret
-EXTERNALIP=
+EXTERNALIP=1.2.3.4
 PRUNE=550
+TLSEXTRADOMAIN=home-sweet-home.dynalias.com
 ```

@@ -9,7 +9,7 @@ services:
     volumes:
       - ./bitcoin:/home/bitcoin/.bitcoin
     networks:
-      rpc:
+      bitcoin:
         ipv4_address: 172.18.0.2
     command:
       - "-prune=${PRUNE:-550}"
@@ -23,6 +23,7 @@ services:
   lnd:
     ports:
       - "9735:9735"
+      - "10009:10009"
     image: joshuanapoli/lnd:v0.14.1-beta
     container_name: lnd
     depends_on:
@@ -31,7 +32,7 @@ services:
     volumes:
       - ./lnd:/root/.lnd
     networks:
-      rpc:
+      bitcoin:
         ipv4_address: 172.18.0.3
     command:
       - "--bitcoin.active"
@@ -44,9 +45,11 @@ services:
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
       - "--externalip=${EXTERNALIP}"
       - "--alias=${ALIAS}"
+      - "--rpclisten=0.0.0.0:10009"
+      - "--tlsextradomain=${TLSEXTRADOMAIN}"
 
 networks:
-  rpc:
+  bitcoin:
     ipam:
       config:
         - subnet: 172.18.0.0/16
