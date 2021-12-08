@@ -5,5 +5,7 @@
 .env
 
 # state
-lnd/
+lnd-1/
+lnd-2/
+lnd-3/
 bitcoin/
