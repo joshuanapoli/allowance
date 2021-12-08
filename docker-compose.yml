@@ -44,7 +44,7 @@ services:
       - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
       - "--externalip=${EXTERNALIP}:9735"
-      - "--alias=${ALIAS-1}"
+      - "--alias=${ALIAS1}"
       - "--rpclisten=0.0.0.0:10009"
       - "--tlsextradomain=${TLSEXTRADOMAIN}"
   lnd-2:
@@ -71,7 +71,7 @@ services:
       - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
       - "--externalip=${EXTERNALIP}:9737"
-      - "--alias=${ALIAS-2}"
+      - "--alias=${ALIAS2}"
       - "--rpclisten=0.0.0.0:10009"
       - "--tlsextradomain=${TLSEXTRADOMAIN}"
   lnd-3:
@@ -98,7 +98,7 @@ services:
       - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
       - "--externalip=${EXTERNALIP}:9739"
-      - "--alias=${ALIAS-3}"
+      - "--alias=${ALIAS3}"
       - "--rpclisten=0.0.0.0:10009"
       - "--tlsextradomain=${TLSEXTRADOMAIN}"
 

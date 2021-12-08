@@ -4,11 +4,11 @@ This repo gives a docker-compose file for running three Lightning Network nodes.
 
 So this project implements a bitcoin core node, supporting three Lightning Network nodes. I run the whole thing on an old Raspberry Pi 2.
 
-Use rpcauth.py to generate a password and hash. Put the values in .env. Fill in EXTERNALIP if you want other lightning users to create channels with you. Set RPCUSER if you want the bitcoin rpc username to be different from "lnd". Set ALIAS-1, ALIAS-2 and ALIAS-3 to name your node (maximum of 32 characters).
+Use rpcauth.py to generate a password and hash. Put the values in .env. Fill in EXTERNALIP if you want other lightning users to create channels with you. Set RPCUSER if you want the bitcoin rpc username to be different from "lnd". Set ALIAS1, ALIAS2 and ALIAS3 to name your node (maximum of 32 characters).
 ```
-ALIAS-1=myname
-ALIAS-2=kid1
-ALIAS-3=kid2
+ALIAS1=myname
+ALIAS2=kid1
+ALIAS3=kid2
 RPCUSER=lnd
 RPCAUTH=lnd:123$567890abcdef
 RPCPASS=secret
