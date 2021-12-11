@@ -20,18 +20,18 @@ services:
       - "-rpcauth=${RPCAUTH:?use rpcauth.py to create a password and set the RPCPASS in .env}"
       - "-zmqpubrawblock=tcp://172.18.0.2:28332"
       - "-zmqpubrawtx=tcp://172.18.0.2:28333"
-  lnd-1:
+  lnd:
     ports:
       - "8080:8080"
       - "9735:9735"
       - "10009:10009"
     image: joshuanapoli/lnd:v0.14.1-beta
-    container_name: lnd-1
+    container_name: lnd
     depends_on:
       - bitcoin-core
     restart: always
     volumes:
-      - ./lnd-1:/root/.lnd
+      - ./lnd:/root/.lnd
     networks:
       bitcoin:
         ipv4_address: 172.18.1.1
@@ -45,65 +45,7 @@ services:
       - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
       - "--externalip=${EXTERNALIP}:9735"
-      - "--alias=${ALIAS1}"
-      - "--rpclisten=0.0.0.0:10009"
-      - "--restlisten=0.0.0.0:8080"
-      - "--tlsextradomain=${TLSEXTRADOMAIN}"
-  lnd-2:
-    ports:
-      - "8082:8080"
-      - "9737:9735"
-      - "10011:10009"
-    image: joshuanapoli/lnd:v0.14.1-beta
-    container_name: lnd-2
-    depends_on:
-      - bitcoin-core
-    restart: always
-    volumes:
-      - ./lnd-2:/root/.lnd
-    networks:
-      bitcoin:
-        ipv4_address: 172.18.1.2
-    command:
-      - "--bitcoin.active"
-      - "--bitcoin.mainnet"
-      - "--bitcoin.node=bitcoind"
-      - "--bitcoind.rpcuser=${RPCUSER:-lnd}"
-      - "--bitcoind.rpcpass=${RPCPASS:?use rpcauth.py to create a password and set the RPCPASS in .env}"
-      - "--bitcoind.rpchost=bitcoin-core"
-      - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
-      - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
-      - "--externalip=${EXTERNALIP}:9737"
-      - "--alias=${ALIAS2}"
-      - "--rpclisten=0.0.0.0:10009"
-      - "--restlisten=0.0.0.0:8080"
-      - "--tlsextradomain=${TLSEXTRADOMAIN}"
-  lnd-3:
-    ports:
-      - "8084:8080"
-      - "9739:9735"
-      - "10013:10009"
-    image: joshuanapoli/lnd:v0.14.1-beta
-    container_name: lnd-3
-    depends_on:
-      - bitcoin-core
-    restart: always
-    volumes:
-      - ./lnd-3:/root/.lnd
-    networks:
-      bitcoin:
-        ipv4_address: 172.18.1.3
-    command:
-      - "--bitcoin.active"
-      - "--bitcoin.mainnet"
-      - "--bitcoin.node=bitcoind"
-      - "--bitcoind.rpcuser=${RPCUSER:-lnd}"
-      - "--bitcoind.rpcpass=${RPCPASS:?use rpcauth.py to create a password and set the RPCPASS in .env}"
-      - "--bitcoind.rpchost=bitcoin-core"
-      - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
-      - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
-      - "--externalip=${EXTERNALIP}:9739"
-      - "--alias=${ALIAS3}"
+      - "--alias=${ALIAS}"
       - "--rpclisten=0.0.0.0:10009"
       - "--restlisten=0.0.0.0:8080"
       - "--tlsextradomain=${TLSEXTRADOMAIN}"
