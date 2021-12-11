@@ -72,3 +72,14 @@ Tasks: 139 total,   1 running, 138 sleeping,   0 stopped,   0 zombie
 MiB Mem :    922.8 total,     52.2 free,    598.1 used,    272.6 buff/cache
 MiB Swap:    100.0 total,      9.5 free,     90.5 used.    271.8 avail Mem
 ```
+
+### Automatic Unlock
+
+It seems annoying to "manually" unlock the wallet every time we want to use it. It is unpredictable when it becomes locked; for example after a reboot. You can automatically unlock with:
+
+1. Create a /home/pi/allowance/password.txt file with the password in it.
+2. Restrict its permissionss.
+   ```shell
+   chmod 0400 /home/pi/allowance/password.txt
+   ```
+3. Add `WALLET_UNLOCK_PASSWORD_FILE=/user/pi/allowance/password` to the .env file.

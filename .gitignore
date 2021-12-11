@@ -3,7 +3,7 @@
 
 # local configuration
 .env
-password
+password.txt
 
 # state
 lnd/
