@@ -22,6 +22,7 @@ services:
       - "-zmqpubrawtx=tcp://172.18.0.2:28333"
   lnd-1:
     ports:
+      - "8080:8080"
       - "9735:9735"
       - "10009:10009"
     image: joshuanapoli/lnd:v0.14.1-beta
@@ -46,9 +47,11 @@ services:
       - "--externalip=${EXTERNALIP}:9735"
       - "--alias=${ALIAS1}"
       - "--rpclisten=0.0.0.0:10009"
+      - "--restlisten=0.0.0.0:8080"
       - "--tlsextradomain=${TLSEXTRADOMAIN}"
   lnd-2:
     ports:
+      - "8082:8080"
       - "9737:9735"
       - "10011:10009"
     image: joshuanapoli/lnd:v0.14.1-beta
@@ -73,9 +76,11 @@ services:
       - "--externalip=${EXTERNALIP}:9737"
       - "--alias=${ALIAS2}"
       - "--rpclisten=0.0.0.0:10009"
+      - "--restlisten=0.0.0.0:8080"
       - "--tlsextradomain=${TLSEXTRADOMAIN}"
   lnd-3:
     ports:
+      - "8084:8080"
       - "9739:9735"
       - "10013:10009"
     image: joshuanapoli/lnd:v0.14.1-beta
@@ -100,6 +105,7 @@ services:
       - "--externalip=${EXTERNALIP}:9739"
       - "--alias=${ALIAS3}"
       - "--rpclisten=0.0.0.0:10009"
+      - "--restlisten=0.0.0.0:8080"
       - "--tlsextradomain=${TLSEXTRADOMAIN}"
 
 networks:
