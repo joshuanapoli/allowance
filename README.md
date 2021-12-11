@@ -13,6 +13,7 @@ RPCPASS=secret
 EXTERNALIP=1.2.3.4
 PRUNE=550
 TLSEXTRADOMAIN=home-sweet-home.dynalias.com
+WALLET_UNLOCK_PASSWORD_FILE=/user/pi/allowance/password
 ```
 
 Check that the certificate has your TLSEXTRADOMAIN in it. `openssl x509 -text -noout -in lnd/tls.cert`

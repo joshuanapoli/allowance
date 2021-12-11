@@ -49,6 +49,7 @@ services:
       - "--rpclisten=0.0.0.0:10009"
       - "--restlisten=0.0.0.0:8080"
       - "--tlsextradomain=${TLSEXTRADOMAIN}"
+      - "--wallet-unlock-password-file=${WALLET_UNLOCK_PASSWORD_FILE}"
 
 networks:
   bitcoin:
