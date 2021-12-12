@@ -44,7 +44,7 @@ services:
       - "--bitcoind.rpchost=bitcoin-core"
       - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
-      - "--externalip=${EXTERNALIP}:9735"
+      - "--externalip=${EXTERNALIP}"
       - "--alias=${ALIAS}"
       - "--rpclisten=0.0.0.0:10009"
       - "--restlisten=0.0.0.0:8080"

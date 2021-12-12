@@ -1,4 +1,4 @@
-# bitcoind-lnd
+# allowance
 
 This repo gives a docker-compose file for running three Lightning Network nodes. In my case, the nodes are meant to provide a fun way to give allowance money to my two kids. Compared with cash, well, we just don't usually have any cash around and the kids just lose it. Compared with opening a checking account: our bank doesn't seem to offer accounts for underage people. There are products like [greenlight](https://www.greenlight.com/) meant for allowance management, but they have monthly fees. I don't really want the kids to buy stuff anyway. We can work together to transform sats into stuff.
 
@@ -10,7 +10,7 @@ ALIAS=myname
 RPCUSER=lnd
 RPCAUTH=lnd:123$567890abcdef
 RPCPASS=secret
-EXTERNALIP=1.2.3.4
+EXTERNALIP=1.2.3.4:9735
 PRUNE=550
 TLSEXTRADOMAIN=home-sweet-home.dynalias.com
 WALLET_UNLOCK_PASSWORD_FILE=/user/pi/allowance/password
@@ -73,13 +73,86 @@ MiB Mem :    922.8 total,     52.2 free,    598.1 used,    272.6 buff/cache
 MiB Swap:    100.0 total,      9.5 free,     90.5 used.    271.8 avail Mem
 ```
 
+# MacOS
+
+[Download and install Docker.](docs.docker.com/desktop/mac/install/)
+
+Open the dmg disk image and drag the Docker app to the dock.
+
+Run the Docker app, for example open spotlight and search for Docker.
+
+Accept the terms and install.
+
+Docker Desktop includes docker-compose.
+
+# Hardware
+
+In my case, the Raspberry Pi 2 was leftover from an earlier project since it was free to use. The good advice is to use an external SSD for Raspberry Pi Bitcoin and Lightning Network projects, because SSDs are faster and designed for better durability than SD Cards. I chose to ignore this good advice. In either case, we need to back-up the Lightning Network node data to an external drive. I think that it will be easy enough to rebuild on a new SD Card when the first one dies. I used a 128 GB SanDisk Extreme Pro, based on [Toms Hardware's review](https://www.tomshardware.com/best-picks/raspberry-pi-microsd-cards). A Raspberry Pi 2 can use up to a 256 GB SD Card, but the larger size was unavailable at the time I ordered. The [128 GB Micro SD Card](https://www.amazon.com/gp/product/B07G3H5RBT/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&th=1) cost me $23.10. 
+
+A Raspberry Pi 2 has 1 GiB RAM, which is apparently sufficient to run bitcoin-core and a single lnd instance. I wanted to run multiple lnd nodes, but I found that it is impossible to run bitcoin-cord plus two lnd instances. The servers keep crashing, presumably because of insufficient memory.
+
+# Networking
+
+The bitcoin-core node should have port 8333 open to the internet. This allows the node to participate in the Bitcoin peer-to-peer network. Once the daemon is started, you can check your network configuration using [bitnodes](https://bitnodes.io/#join-the-network). The web site will check whether it can connect to your node. After a while, you should also attract incoming connections. These will be listed by bitcoin-cli getnetworkinfo as connection_in.
+
+It only makes sense to have one bitcoin-core node on the local network. Therefore, this configuration exposes the bitcoin-core ZMQ and RPC ports, so that I can use it with multiple lnd nodes. Do not expose the ZMQ and RPC ports to the internet. If you use the wallet on the bitcoin-core node, then the RPC interface would give access to it.
+
+
+The RPC interface is password-protected, but it can give access to the node's wallet. I don't use the node wallet, so it's not a concern for me.
+
+# LND Setup
+
+### Create a Ligntning Network Node
+
+Start with a .env configuration like this:
+```
+ALIAS=myname
+RPCUSER=lnd
+RPCAUTH=lnd:123$567890abcdef
+RPCPASS=secret
+EXTERNALIP=1.2.3.4:9735
+PRUNE=550
+TLSEXTRADOMAIN=home-sweet-home.dynalias.com
+```
+Later, we will add a unlocking password file.
+
+How do we get the RPCAUTH and RPCPASS values? We should include a script to generate them here.
+
+docker exec -it lnd lncli create
+
+Answer "n" to "Do you have an existing cipher [...]". Do not use a passphrase.
+
 ### Automatic Unlock
 
 It seems annoying to "manually" unlock the wallet every time we want to use it. It is unpredictable when it becomes locked; for example after a reboot. You can automatically unlock with:
 
-1. Create a /home/pi/allowance/password.txt file with the password in it.
+1. Create a /home/pi/allowance/lnd/password.txt file with the password in it.
 2. Restrict its permissionss.
    ```shell
-   chmod 0400 /home/pi/allowance/password.txt
+   chmod 0400 /home/pi/allowance/lnd/password.txt
    ```
-3. Add `WALLET_UNLOCK_PASSWORD_FILE=/user/pi/allowance/password` to the .env file.
+3. Add `WALLET_UNLOCK_PASSWORD_FILE=/root/.lnd/password.txt` to the .env file.
+
+### Integrate with UI
+
+echo lndconnect:...
+
+you don't need to automatic unlock if you use the zap desktop app.
+
+### Integrate with LDN
+
+open port 9735 to the internet
+
+### Create a channel for allowance
+
+docker exec -it lnd lncli getinfo
+
+Get your identity_pubkey.
+
+#### Connect 
+
+On Pi, docker exec -it lnd lncli connect <identity_pubkey>@joshuanapoli.dynalias.com:9736
+
+#### Create a channel
+
+docker exec -it lnd lncli openchannel <identity_pubkey> --local_amt 10000
