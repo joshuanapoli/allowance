@@ -25,7 +25,7 @@ services:
       - "8080:8080"
       - "9735:9735"
       - "10009:10009"
-    image: joshuanapoli/lnd:v0.14.1-beta
+    image: joshuanapoli/lnd:v0.14.1-beta # Same as https://hub.docker.com/r/lightninglabs/lnd plus Raspberry Pi support
     container_name: lnd
     depends_on:
       - bitcoin-core
