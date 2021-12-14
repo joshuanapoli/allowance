@@ -70,7 +70,7 @@ services:
       - "--uipassword=${LITDPASS:?create a password and set the LITDPASS in .env}"
       - "--httpslisten=0.0.0.0:8443"
       - "--letsencrypt"
-      - "--letsencrypthost=${TLSEXTRADOMAIN}"
+      - "--letsencrypthost=${HOST}"
 networks:
   bitcoin:
     ipam:
