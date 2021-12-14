@@ -53,6 +53,7 @@ services:
       - "--wallet-unlock-password-file=${WALLET_UNLOCK_PASSWORD_FILE}"
   lightning-terminal:
     ports:
+      - "80:80"
       - "8443:8443"
     image: joshuanapoli/lightning-terminal:v0.6.1-alpha
     container_name: lightning-terminal
