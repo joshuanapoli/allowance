@@ -34,12 +34,12 @@ RPCAUTH=lnd:123$567890abcdef
 RPCPASS=secret
 EXTERNALIP=1.2.3.4:9735
 PRUNE=550
-TLSEXTRADOMAIN=home-sweet-home.dynalias.com
+HOST=home-sweet-home.dynalias.com
 WALLET_UNLOCK_PASSWORD_FILE=/user/pi/allowance/password
 ```
 
-Check that the certificate has your TLSEXTRADOMAIN in it. `openssl x509 -text -noout -in lnd/tls.cert`
-Rebuild the certificate if you change TLSEXTRADOMAIN. `sudo rm lnd/tls.cert lnd/tls.key`. `docker-compose restart`.
+Check that the certificate has your HOST in it. `openssl x509 -text -noout -in lnd/tls.cert`
+Rebuild the certificate if you change HOST. `sudo rm lnd/tls.cert lnd/tls.key`. `docker-compose restart`.
 https://docs.zaphq.io/docs-desktop-lnd-configure
 
 
@@ -48,7 +48,7 @@ Build a lndconnect uri for zap. See https://github.com/LN-Zap/lndconnect/blob/ma
 ```shell
 sudo apt-get install -y qrencode
 source .env
-echo lndconnect://${TLSEXTRADOMAIN}:10009?cert="`grep -v 'CERTIFICATE' lnd/tls.cert | tr -d '=' | tr '/+' '_-'`"'&macaroon='"`sudo base64 lnd/data/chain/bitcoin/mainnet/admin.macaroon | tr -d '=' | tr '/+' '_-'`" | tr -d '\n' | qrencode -o /tmp/out.png
+echo lndconnect://${HOST}:10009?cert="`grep -v 'CERTIFICATE' lnd/tls.cert | tr -d '=' | tr '/+' '_-'`"'&macaroon='"`sudo base64 lnd/data/chain/bitcoin/mainnet/admin.macaroon | tr -d '=' | tr '/+' '_-'`" | tr -d '\n' | qrencode -o /tmp/out.png
 ```
 
 ```shell
@@ -134,7 +134,7 @@ RPCAUTH=lnd:123$567890abcdef
 RPCPASS=secret
 EXTERNALIP=1.2.3.4:9735
 PRUNE=550
-TLSEXTRADOMAIN=home-sweet-home.dynalias.com
+HOST=home-sweet-home.dynalias.com
 ```
 Later, we will add a unlocking password file.
 
