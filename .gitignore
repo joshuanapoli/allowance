@@ -5,6 +5,7 @@
 .env
 password.txt
 
-# state
+# volumes
 lnd/
 bitcoin/
+thunderhub/
