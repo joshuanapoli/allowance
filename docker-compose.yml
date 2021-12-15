@@ -96,6 +96,29 @@ services:
 #      SSO_MACAROON_PATH: "/lnd/data/chain/bitcoin/mainnet/admin.macaroon"
 #      SSO_CERT_PATH: "/lnd/tls.cert"
 
+  rtl:
+    container_name: rtl
+    image: shahanafarooqui/rtl:0.11.2
+    restart: always
+    depends_on:
+      - lnd
+    volumes:
+      - ./lnd:/lnd:ro
+    ports:
+      - "3000:3000"
+    networks:
+      bitcoin:
+        ipv4_address: 172.18.3.1
+    environment:
+      PORT: 3000
+      MACAROON_PATH: /lnd/data/chain/bitcoin/mainnet
+      LN_SERVER_URL: https://172.18.1.1:8080
+      LN_IMPLEMENTATION: LND
+      RTL_SSO: 0
+      RTL_COOKIE_PATH: ''
+      RTL_CONFIG_PATH: /RTL
+      CHANNEL_BACKUP_PATH: /shared/lnd/backup
+
 networks:
   bitcoin:
     ipam:
