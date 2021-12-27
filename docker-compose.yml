@@ -36,18 +36,19 @@ services:
       bitcoin:
         ipv4_address: 172.18.1.1
     command:
+      - "--accept-amp"
+      - "--alias=${ALIAS}"
       - "--bitcoin.active"
       - "--bitcoin.mainnet"
       - "--bitcoin.node=bitcoind"
-      - "--bitcoind.rpcuser=${RPCUSER:-lnd}"
-      - "--bitcoind.rpcpass=${RPCPASS:?use rpcauth.py to create a password and set the RPCPASS in .env}"
       - "--bitcoind.rpchost=bitcoin-core"
+      - "--bitcoind.rpcpass=${RPCPASS:?use rpcauth.py to create a password and set the RPCPASS in .env}"
+      - "--bitcoind.rpcuser=${RPCUSER:-lnd}"
       - "--bitcoind.zmqpubrawblock=tcp://bitcoin-core:28332"
       - "--bitcoind.zmqpubrawtx=tcp://bitcoin-core:28333"
       - "--externalip=${EXTERNALIP}"
-      - "--alias=${ALIAS}"
-      - "--rpclisten=0.0.0.0:10009"
       - "--restlisten=0.0.0.0:8080"
+      - "--rpclisten=0.0.0.0:10009"
       - "--tlsextradomain=${HOST}"
       - "--tlsextraip=172.18.1.1"
       - "--wallet-unlock-password-file=${WALLET_UNLOCK_PASSWORD_FILE}"
