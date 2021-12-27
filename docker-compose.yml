@@ -32,12 +32,14 @@ services:
     restart: always
     volumes:
       - ./lnd:/root/.lnd
+      - ./st-sync:/var/syncthing
     networks:
       bitcoin:
         ipv4_address: 172.18.1.1
     command:
       - "--accept-amp"
       - "--alias=${ALIAS}"
+      - "--backupfilepath=/var/syncthing/Sync/channel.backup"
       - "--bitcoin.active"
       - "--bitcoin.mainnet"
       - "--bitcoin.node=bitcoind"
@@ -105,6 +107,8 @@ services:
       - lnd
     volumes:
       - ./lnd:/lnd:ro
+      - ./rtl:/rtl
+      - ./st-sync:/var/syncthing
     ports:
       - "3000:3000"
     networks:
@@ -117,23 +121,18 @@ services:
       LN_IMPLEMENTATION: LND
       RTL_SSO: 0
       RTL_COOKIE_PATH: ''
-      RTL_CONFIG_PATH: /RTL
-      CHANNEL_BACKUP_PATH: /shared/lnd/backup
+      RTL_CONFIG_PATH: /rtl
+      CHANNEL_BACKUP_PATH: /var/syncthing/Sync
 
   syncthing:
     image: syncthing/syncthing
     container_name: syncthing
     hostname: lnd-${ALIAS}
     environment:
-      - PUID=0
+      - PUID=0 # dangerously run as root because lnd runs as root (need to change the lnd docker to run as non-root)
       - PGID=0
     volumes:
       - ./st-sync:/var/syncthing
-      - ./lnd/data/chain/bitcoin/mainnet:/var/syncthing/Sync
-#    ports:
-#      - 8384:8384
-#      - 22000:22000/tcp
-#      - 22000:22000/udp
     restart: always
     network_mode: host # host network mode required for local device discovery
 
