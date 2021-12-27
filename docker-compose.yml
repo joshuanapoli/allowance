@@ -120,6 +120,34 @@ services:
       RTL_CONFIG_PATH: /RTL
       CHANNEL_BACKUP_PATH: /shared/lnd/backup
 
+  syncthing:
+    image: syncthing/syncthing
+    container_name: syncthing
+    hostname: lnd-${ALIAS}
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./st-sync:/var/syncthing
+      - ./lnd/data/chain/bitcoin/mainnet:/var/syncthing/Sync
+#    ports:
+#      - 8384:8384
+#      - 22000:22000/tcp
+#      - 22000:22000/udp
+    restart: always
+    network_mode: host # host network mode required for local device discovery
+
+#  synchting-confg:
+#    image: syncthing/syncthing
+#    container_name: syncthing-confg
+#    hostname: syncthing-confg-${ALIAS}
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#    volumes:
+#      - ./st-sync:/var/syncthing
+#      - ./lnd/data/chain/bitcoin/mainnet:/var/syncthing/Sync
+
 networks:
   bitcoin:
     ipam:
