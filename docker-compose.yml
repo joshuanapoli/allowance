@@ -124,9 +124,6 @@ services:
     image: syncthing/syncthing
     container_name: syncthing
     hostname: lnd-${ALIAS}
-    environment:
-      - PUID=1000
-      - PGID=1000
     volumes:
       - ./st-sync:/var/syncthing
       - ./lnd/data/chain/bitcoin/mainnet:/var/syncthing/Sync
