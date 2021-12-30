@@ -4,19 +4,52 @@ My wife and I like to give my kids allowance and rewards for doing certain chore
 
 We will start our cryptocurrency journey at the beginning: with Bitcoin. The kids and their friends have heard of it. I have read the original Bitcoin papers so I have some chance of explaining something about how it works. I hope that these factors will make Bitcoin allowance be more relatable and relevant to our family. 
 
-There are a couple of problems to get started. First, Bitcoin is too slow. Kids are pretty impatient. Waiting 30 minutes for a transaction confirmation just does not make sense. The second problem is that fees are sometimes high. Right now, it costs about 10 cents for a Bitcoin transaction, but the cost is sometimes as high as $20. It is pretty steep for sending a dollar. The Bitcoin ecosystem kind of has a solution for these problems: the [Lightning Network](https://lightning.network/).
+There are a couple of problems to get started. First, Bitcoin is too slow. Kids are pretty impatient. Waiting 30 minutes for a transaction confirmation just does not make sense. The second problem is that fees are sometimes high. Right now, it costs about 10 cents for a Bitcoin transaction, but the cost is sometimes as high as $20. So the Bitcoin fee is generally too high for sending a dollar at a time. The Bitcoin ecosystem has a solution for these problems: the [Lightning Network](https://lightning.network/).
 
-The network has been around for a few years. It provides low-cost Bitcoin transactions across channels. Channels provide secure transactions between pairs of users, and they connect together transitively to provide transactions between any members of the network. Adoption has been slow because the Lightning Network is awkward to use. A Bitcoin wallet is just data. If you keep your private key safe and secure, then your balance is still good and available even if you don't think about it for years. On the other hand, each channel on the Lightning Network requires a server to be constantly online. Maybe watchtowers will lift this responsibility from the shoulders of individual users, but it remains to be seen whether these are a scalable and properly incentivised solution. If a server is offline for too long, then the balances on the channel are vulnerable. Despite this problem, Jack Dorsey and El Salvador have been interested in the Lightning Network lately. [Twitter can now send Bitcoin tips to authors via the Lightning Network.](https://blog.twitter.com/en_us/topics/product/2021/bringing-tips-to-everyone) So we will also give the Lightning Network another try, to see if it works for our family allowances.
-
-We need a Bitcoin full node, in order to run a Lightning Network channel. To test things out, I am using an old Raspberry Pi 2. I think that running on Raspberry Pi is more in-character for blockchain nodes than relying on a cloud provider. I will run a full Bitcoin node. This means that I need at least 300 GB to store the blockchain. Unfortunately, Raspberry Pi 2 has a bug that limits the maximum SD card size to 256 MB. So I need an external hard drive to store the blockchain. Luckily, I have an old unused 5 TB drive layout around, which I reformatted for this project.
+So begins a new project. The main goal is to create a digital solution for accounting for small amounts of money between parents and kids. Everyone needs to have some ability to spend the money that they have, which rules out simple spreadsheet accounting. Transactions should be pretty quick. In the spirit of trust-minimized systems, the solution should be local. We will avoid using a commercial cloud-hosted service, especially one that would require a monthly fee. If possible, the solution will run on my spare Raspberry Pi 2. It should have a reproducible installation using Docker.
 
 ## The Lightning Network
 
-The Lightning Network node is a peer-to-peer payment network that allows participants to send and receive payments. The Lightning Network uses a _flow model_ where Bitcoin and Ethereum use a _broadcase model_. In Lightning Network, payments flow through a graph of connections. The payment is not handled by the network at large, only the nodes along the path between the two transacting parties. Channels are linked to the Bitcoin blockchain via special contracts. To open a channel, one party locks up a quantity of Bitcoin. This amount is now available for spending and can flow through the network. Bitcoin is released to an ordinary address when the channel is closed. Normally closing the channel happens cooperatively by the two parties. Channels can also be force-closed by one party, using a sweep. The flow model allows transactions to settle much faster and generally allows lower fees. On the other hand, it requires nodes to be constantly online in order to transmit payments, guard against malicious channel closes and handle channel open/close message.
+The Lightning Network node is a peer-to-peer payment network that allows participants to send and receive payments. The network has been around for a few years. It provides low-cost Bitcoin transactions across channels. The Lightning Network uses a _flow model_, which contrasts with the _broadcast model_ used in Bitcoin and Ethereum use a _broadcast model_. 
 
-Ethereum sharding.
+In Lightning Network, payments flow through a graph of connections. The payment is not handled by the network at large, only the nodes along the path between the two transacting parties. Channels are linked to the Bitcoin blockchain via special contracts. Any number of transactions can be sent through the channel, but only two blockchain transactions are needed per channel. One transaction opens the channel, and a second one closes it. The flow model allows transactions to settle much faster and generally allows lower fees. On the other hand, it requires nodes to be constantly online in order to transmit payments, guard against malicious channel closes and handle channel open/close message. 
 
-Newer technologies like Solana have other ways of dealing with scaling network capacity, but they are less known and also seem to be less mature and reliable than Bitcoin.
+The need for each node to be constant online and active makes Lightning Network rather awkward to use. Running a Lightning Network node requires attention to disaster recovery and high availability concerns that are not present in blockchain nodes. Despite this problem, Jack Dorsey and El Salvador have been interested in the Lightning Network lately. [Twitter can now send Bitcoin tips to authors via the Lightning Network.](https://blog.twitter.com/en_us/topics/product/2021/bringing-tips-to-everyone) So we will also give the Lightning Network a try, to see if it works for our family allowances.
+
+## Create the Node
+
+### Software Stack
+
+[Umbrel](https://getumbrel.com/) appears to be the premier distribution for an at-home node. If you already have a 4 GiB Raspberry Pi 4, or can buy [Umbrel's hardware](https://thebitcoinmachines.com/product/machine-with-umbrel/), then you will definitely have an easier time. In my case, I am trying to restrict myself to making use of my old Raspberry Pi 2. It only has 1 GiB of RAM and cannot run the Umbrel distribution.
+
+The reference implementation and most common server for Lightning Network is [lnd](https://github.com/lightningnetwork/lnd). The lnd service depends on a Bitcoin full node. Again, I will go with the reference implementation, [Bitcoin Core](https://bitcoincore.org/).
+
+I included Ride The Lightning in my setup. This web interface was a little easier than using the command-line. At least it saved me the need to setup ssh keys to easily log into my raspberry pi system.
+
+### Raspberry Pi
+
+As I mentioned, I am using a Raspberry Pi 2. To keep things simple, I used the SD Card for all storage. 
+
+You will see that most other guides recommend a SSD. I am consciously disregarding that advice. I have some money encoded on this thing and will be running backups (as described below). When the SD Card quits, it should be "easy" to rebuild the system from this docker-compose configuration and the backups.
+
+### Monitoring
+
+Going offline is unhealthy for a Lightning Network node. It obviously eliminates the possibility of routing transactions. Moreover, if one of our channel partners is unscrupulous, they could theoretically submit an stale commitment transaction. Typically, we have 24 hours to post the invalidation transaction to punish an unscrupulous (or confused) peer in this case. The time period depends on the CSV Delay set when opening the channel. If our node is offline, it would not be able to post the invalidation transaction, which could result in loss of funds. This scenario is pretty unlikely, but it does show that we need to have monitoring and alerting in place. (Watchtowers are a new alternative, but watchtower setup will be out of scope for this project.)
+
+The [lightning.watch](https://lightning.watch/) service can notify us via telegram when our node goes offline.
+
+It would also be nice for the little server to send some email when the disk is getting full, if the system starts rebooting too much, or if the services become unavailable. Raspberry Pi OS does not come with a Mail Transfer Agent, and setting one up will be out of scope for this project.
+
+The 1ml.com website does offer some level of alerting. I signed up for it, and I hope that it will alert me if my server becomes unavailable.
+
+### Initial Block Download
+
+It is 
+
+Now, a Raspberry Pi 2 can use a maximum 256 GiB SD Card.
+
+We need a Bitcoin full node, in order to run a Lightning Network channel. To test things out, I am using an old Raspberry Pi 2. I think that running on Raspberry Pi is more in-character for blockchain nodes than relying on a cloud provider. I will run a full Bitcoin node. This means that I need at least 300 GB to store the blockchain. Unfortunately, Raspberry Pi 2 has a bug that limits the maximum SD card size to 256 MB. So I need an external hard drive to store the blockchain. Luckily, I have an old unused 5 TB drive layout around, which I reformatted for this project.
+
 
 ## Online/Offiline
 
@@ -188,8 +221,6 @@ docker exec -it lnd lncli openchannel <identity_pubkey> --local_amt 10000
 # Limitations
 
 The Raspberry Pi 2 only has 1 GiB of memory. I found that it was impossible to run bitcoind plus two lnd instances because the lnd instances keep crashing. I could not run thunderhub. The combination of bitcoind, lnd and RTL, as configured by this repo in this repo is working for me.
-
-Ride The Lightning
 
 I am not too happy with user-interfaces for Lightning Network. Zap was created by Jack Mallers. I like the simplicity of [Zap](https://www.zaphq.io/). The [Zap iOS](https://github.com/LN-Zap/zap-iOS#unmaintained) app works for me, if I set my lnd node to auto-unlock. Unfortunately, the author warns that the iOS app now unmaintained. The [Zap Deskop app](https://github.com/LN-Zap/zap-desktop) is also nice, but it has some bugs that prevents it from starting up if the node is already unlocked. [Jack Mallers](https://twitter.com/JackMallers) moved on to build [Strike](https://strike.me/en/), which famously works with Twitter to enable Bitcoin tips via Lightning Network. It is a really nice product, but it is not relevant to a self-run Lightning Network node.
 
