@@ -4,7 +4,7 @@ services:
     ports:
       - "8333:8333"
     container_name: bitcoin-core
-    image: ruimarinho/bitcoin-core
+    image: ruimarinho/bitcoin-core:22.0
     restart: always
     volumes:
       - ./bitcoin:/home/bitcoin/.bitcoin
@@ -101,7 +101,7 @@ services:
 
   rtl:
     container_name: rtl
-    image: shahanafarooqui/rtl:0.11.2
+    image: shahanafarooqui/rtl:0.12.0
     restart: always
     depends_on:
       - lnd
