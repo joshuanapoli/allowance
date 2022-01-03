@@ -53,7 +53,6 @@ services:
       - "--rpclisten=0.0.0.0:10009"
       - "--tlsextradomain=${HOST}"
       - "--tlsextraip=172.18.1.1"
-      - "--wallet-unlock-password-file=${WALLET_UNLOCK_PASSWORD_FILE}"
 
 # We can run lightning-terminal, but it's not needed...
 #  lightning-terminal:
@@ -77,27 +76,6 @@ services:
 #      - "--httpslisten=0.0.0.0:8443"
 #      - "--letsencrypt"
 #      - "--letsencrypthost=${HOST}"
-
-# Seemingly not enough memory to start up lnd alongside thunderhub
-#  thunderhub:
-#    ports:
-#      - "3000:3000"
-#    image: apotdevin/thunderhub:v0.12.31
-#    container_name: thunderhub
-#    depends_on:
-#      - lnd
-#    restart: always
-#    volumes:
-#      - ./lnd:/lnd
-#      - ./thunderhub:/data
-#    networks:
-#      bitcoin:
-#        ipv4_address: 172.18.3.1
-#    environment:
-#      COOKIE_PATH: "/data/.cookie"
-#      SSO_SERVER_URL: "172.18.1.1:10009"
-#      SSO_MACAROON_PATH: "/lnd/data/chain/bitcoin/mainnet/admin.macaroon"
-#      SSO_CERT_PATH: "/lnd/tls.cert"
 
   rtl:
     container_name: rtl
@@ -135,17 +113,6 @@ services:
       - ./st-sync:/var/syncthing
     restart: always
     network_mode: host # host network mode required for local device discovery
-
-#  synchting-confg:
-#    image: syncthing/syncthing
-#    container_name: syncthing-confg
-#    hostname: syncthing-confg-${ALIAS}
-#    environment:
-#      - PUID=1000
-#      - PGID=1000
-#    volumes:
-#      - ./st-sync:/var/syncthing
-#      - ./lnd/data/chain/bitcoin/mainnet:/var/syncthing/Sync
 
 networks:
   bitcoin:

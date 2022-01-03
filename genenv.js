@@ -59,9 +59,6 @@ RPCPASS=${password}
 # Address of this node
 EXTERNALIP=${externalip}
 HOST=${await getDomain(externalip)}
-
-# To automatically unlock lnd, create lnd/password.txt and set this to /root/.lnd/password.txt
-WALLET_UNLOCK_PASSWORD_FILE=
 `;
 
   await fs.writeFileSync(".env", env);
