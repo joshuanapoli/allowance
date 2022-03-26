@@ -1,25 +1,5 @@
 version: "3.3"
 services:
-  bitcoin-core:
-    ports:
-      - "8333:8333"
-    container_name: bitcoin-core
-    image: ruimarinho/bitcoin-core:22.0
-    restart: always
-    volumes:
-      - ./bitcoin:/home/bitcoin/.bitcoin
-    networks:
-      bitcoin:
-        ipv4_address: 172.18.0.2
-    command:
-      - "-prune=${PRUNE:-550}"
-      - "-rpcbind=127.0.0.1"
-      - "-rpcallowip=127.0.0.1"
-      - "-rpcbind=172.18.0.2"
-      - "-rpcallowip=172.18.0.0/16"
-      - "-rpcauth=${RPCAUTH:?use rpcauth.py to create a password and set the RPCPASS in .env}"
-      - "-zmqpubrawblock=tcp://172.18.0.2:28332"
-      - "-zmqpubrawtx=tcp://172.18.0.2:28333"
   lnd:
     ports:
       - "8080:8080"
@@ -27,8 +7,6 @@ services:
       - "10009:10009"
     image: joshuanapoli/lnd:v0.14.2-beta # Same as https://hub.docker.com/r/lightninglabs/lnd plus Raspberry Pi support
     container_name: lnd
-    depends_on:
-      - bitcoin-core
     restart: always
     volumes:
       - ./lnd:/root/.lnd

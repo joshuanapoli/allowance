@@ -1,0 +1,22 @@
+version: "3.3"
+services:
+  bitcoin-core:
+    ports:
+      - "8332:8332"
+      - "8333:8333"
+      - "28332:28332"
+      - "28333:28333"
+    container_name: bitcoin-core
+    image: ruimarinho/bitcoin-core:22.0
+    restart: always
+    volumes:
+      - ./bitcoin:/home/bitcoin/.bitcoin
+    command:
+      - "-prune=${PRUNE:-550}"
+      - "-rpcbind=127.0.0.1"
+      - "-rpcallowip=127.0.0.1"
+      - "-rpcbind=0.0.0.0"
+      - "-rpcallowip=0.0.0.0"
+      - "-rpcauth=${RPCAUTH:?use rpcauth.py to create a password and set the RPCPASS in .env}"
+      - "-zmqpubrawblock=tcp://0.0.0.0:28332"
+      - "-zmqpubrawtx=tcp://0.0.0.0:28333"

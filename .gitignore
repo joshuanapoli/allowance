@@ -6,8 +6,6 @@
 password.txt
 
 # volumes
-lnd/
-bitcoin/
-thunderhub/
-st-sync/
-rtl/
+lnd/lnd/
+lnd/trl/
+bitcoin-core/bitcoin/
