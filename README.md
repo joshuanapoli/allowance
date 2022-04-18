@@ -37,6 +37,10 @@ If you are starting with a fresh SD Card, here is how to install the Raspberry P
 5. Watch out! Now your Raspberry Pi can accept remote login but has the default password. You can log into it by running `ssh pi@raspberrypi`.
 6. Change to a secure password by running `passwd`.
 7. [Install fail2ban](https://www.raspberrypi.com/documentation/computers/configuration.html#installing-fail2ban) to prevent brute-force attacks on your password login.
+8. Install git:
+    ```
+    sudo apt install git
+    ```
 
 ### Docker
 
