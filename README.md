@@ -85,6 +85,15 @@ To install Docker on MacOS, just [download and install Docker Desktop.](docs.doc
 
 ### Start Services
 
+#### bitcoin-core
+
+1. Set the hostname to bitcoin-core.
+   ```shell
+   sudo hostnamectl set-hostname bitcoin-core
+   ```
+
+#### lnd
+
 The docker-compose file needs to be configured by a `.env` file. The "genenv.js" script generates the file. Once the Rasperry Pi is setup with Docker, run `genenv.js` to generate the default `.env` file:
 1. Get this repository.
    ```shell

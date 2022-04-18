@@ -16,7 +16,7 @@ services:
       - "-rpcbind=127.0.0.1"
       - "-rpcallowip=127.0.0.1"
       - "-rpcbind=0.0.0.0"
-      - "-rpcallowip=0.0.0.0"
+      - "-rpcallowip=0.0.0.0/0"
       - "-rpcauth=${RPCAUTH:?use rpcauth.py to create a password and set the RPCPASS in .env}"
       - "-zmqpubrawblock=tcp://0.0.0.0:28332"
       - "-zmqpubrawtx=tcp://0.0.0.0:28333"
