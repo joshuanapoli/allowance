@@ -30,7 +30,7 @@ To keep things simple, I use the SD Card for all storage. Most guides recommend 
 
 If you are starting with a fresh SD Card, here is how to install the Raspberry PI Operating System:
 
-1.Download and install the Raspberry Pi Imager from [https://www.raspberrypi.com/software/](https://www.raspberrypi.com/software/)
+1. Download and install the Raspberry Pi Imager from [https://www.raspberrypi.com/software/](https://www.raspberrypi.com/software/)
 2. Install Raspberry Pi OS Lite (32-bit) to get the operating system without the desktop environment. We do not need the desktop, since the project will be a headless server.
 3. Enable the ssh daemon by creating a file name "ssh" in the root directory. To do this using a Mac, first mount the newly created disk. Run `touch /Volumes/boot/ssh` to create the file. When the "ssh" file is present in the root directory of the boot partition, Raspberry Pi OS starts the ssh daemon when it boots. Finally, eject the disk.
 4. Install the SD Card in the Raspberry Pi. Connect it to the network and boot it up.
