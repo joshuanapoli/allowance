@@ -5,7 +5,7 @@ services:
       - "8080:8080"
       - "9735:9735"
       - "10009:10009"
-    image: joshuanapoli/lnd:v0.14.2-beta # Same as https://hub.docker.com/r/lightninglabs/lnd plus Raspberry Pi support
+    image: joshuanapoli/lnd:v0.14.3-beta # Same as https://hub.docker.com/r/lightninglabs/lnd plus Raspberry Pi support
     container_name: lnd
     restart: always
     volumes:

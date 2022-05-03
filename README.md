@@ -87,6 +87,8 @@ To install Docker on MacOS, just [download and install Docker Desktop.](docs.doc
 
 #### bitcoin-core
 
+Needs port 8333 open to the internet.
+
 1. Set the hostname to bitcoin-core.
    ```shell
    sudo hostnamectl set-hostname bitcoin-core
