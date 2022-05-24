@@ -57,7 +57,7 @@ services:
 
   rtl:
     container_name: rtl
-    image: shahanafarooqui/rtl:0.12.1
+    image: shahanafarooqui/rtl:0.12.3
     restart: always
     depends_on:
       - lnd

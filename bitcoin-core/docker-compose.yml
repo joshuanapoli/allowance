@@ -13,8 +13,6 @@ services:
       - ./bitcoin:/home/bitcoin/.bitcoin
     command:
       - "-prune=${PRUNE:-550}"
-      - "-rpcbind=127.0.0.1"
-      - "-rpcallowip=127.0.0.1"
       - "-rpcbind=0.0.0.0"
       - "-rpcallowip=0.0.0.0/0"
       - "-rpcauth=${RPCAUTH:?use rpcauth.py to create a password and set the RPCPASS in .env}"
