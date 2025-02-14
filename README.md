@@ -117,7 +117,7 @@ scp -r ./lnd pi@raspberrypi:~/allowance/lnd
 
 ### Bitcoin Core
 
-Bitcoin Core does not have an official Docker image. I chose to use [ruimarinho/bitcoin-core](https://hub.docker.com/r/ruimarinho/bitcoin-core), the most popular public image that I coudl find. This docker-compose configures the Bitcoin Core to store its data in the "bitcoin" subdirectory.
+Bitcoin Core does not have an official Docker image. I chose to use [ruimarinho/bitcoin-core](https://hub.docker.com/r/ruimarinho/bitcoin-core), the most popular public image that I could find. This docker-compose configures the Bitcoin Core to store its data in the "bitcoin" subdirectory.
 
 #### Initial Block Download
 
